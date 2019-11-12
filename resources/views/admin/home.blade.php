@@ -1,7 +1,56 @@
 @extends('../layout')
 
+@push('css')
+
+    <link rel="stylesheet" href="{{asset('css/addEmployee.css')}}">
+
+@endpush
+
 @section('content')
-    
+    <div class="modal fade" id="modal-addEmployee" role="dialog">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-body">
+                    <h1>Add Employee</h1>
+                    <form id="regForm" class="pb-3" action="/action_page.php">
+                        <div class="tab">Personal Information:
+                            <p><input class="form-control uppercase" placeholder="First name..." oninput="this.className = ''" name="fname"></p>
+                            <p><input class="form-control uppercase" placeholder="Middle name..." oninput="this.className = ''" name="mname"></p>
+                            <p><input class="form-control uppercase" placeholder="Last name..." oninput="this.className = ''" name="lname"></p>
+                            {{-- <p><input class="form-control upper-case" onkeypress="return false;" oninput="this.className = ''" name="bdate" id="bdate"></p> --}}
+                        </div>
+                        <div class="tab">Contact Info:
+                            <p><input class="form-control" placeholder="E-mail..." oninput="this.className = ''" name="email"></p>
+                            <p><input class="form-control" placeholder="Mobile number..." oninput="this.className = ''" name="phone"></p>
+                        </div>
+                        <div class="tab">Birthday:
+                            <p><input class="form-control" placeholder="dd" oninput="this.className = ''" name="dd"></p>
+                            <p><input class="form-control" placeholder="mm" oninput="this.className = ''" name="nn"></p>
+                            <p><input class="form-control" placeholder="yyyy" oninput="this.className = ''" name="yyyy"></p>
+                        </div>
+                        <div class="tab">Login Info:
+                            <p><input class="form-control" placeholder="Username..." oninput="this.className = ''" name="uname"></p>
+                            <p><input class="form-control" placeholder="Password..." oninput="this.className = ''" name="pword" type="password"></p>
+                        </div>
+                        <div style="overflow:auto;">
+                            <div style="float:right;">
+                            <button type="button" id="prevBtn">Previous</button>
+                            <button type="button" id="nextBtn">Next</button>
+                            </div>
+                        </div>
+                        <!-- Circles which indicates the steps of the form: -->
+                        <div style="text-align:center;margin-top:40px;">
+                            <span class="step"></span>
+                            <span class="step"></span>
+                            <span class="step"></span>
+                            <span class="step"></span>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <div class="container-fluid">
         <div class="mb-2">
             <ul class="nav nav-tabs sticky-top bg-white">
@@ -13,10 +62,11 @@
                 </li>
             </ul>
             <div class="tab-content mt-5">
-                <div id="userInfo" class="container-fluid tab-pane">
-                    <div class="card text-white bg-dark shadow-lg">
+                <div id="userInfo" class="container-fluid tab-pane active">
+                    <div class="card shadow-lg">
                       <div class="card-body table-responsive">
-                          <table class="table table-bordered text-white">
+                          <button id="add" class="btn btn-success float-right mb-2"><i class="fas fa-plus"></i></button>
+                          <table class="table table-bordered">
                               <thead>
                                   <tr>
                                       <th class="text-center" colspan=4><h3><i>EMPLOYEE INFORMATION TABLE</i></h3></th>
@@ -33,15 +83,16 @@
                                       <td>2019-1234</td>
                                       <td>VERGARA, JOHN REE CENIZA</td>
                                       <td>IT PROGRAMMER ASSOCIATE</td>
-                                      <td style="width: 20%;">
-                                          <div class="row">
-                                              <div class="col-md-6">
-                                                  <button type="button" name="" id="" class="btn btn-info btn-block">Details</button>
-                                              </div>
-                                              <div class="col-md-6">
-                                                  <button type="button" name="" id="" class="btn btn-primary btn-block">Edit</button>
-                                              </div>
-                                          </div>
+                                      <td class="text-center">
+                                          {{-- <div class="row"> --}}
+                                              {{-- <div class="col-md-6"> --}}
+                                                  <button type="button" name="" id="" class="btn btn-info"><i class="fas fa-bars"></i></button>
+                                              {{-- </div>
+                                              <div class="col-md-6"> --}}
+                                                  <button type="button" name="" id="" class="btn btn-primary"><i class="far fa-edit"></i></button>
+                                                  <button type="button" name="" id="" class="btn btn-danger"><i class="far fa-trash-alt"></i></button>
+                                              {{-- </div> --}}
+                                          {{-- </div> --}}
                                       </td>
                                   </tr>
                               </tbody>
@@ -49,127 +100,22 @@
                       </div>
                     </div>
                 </div>
-                <div id="addUser" class="container-fluid tab-pane active">
-                    <div class="row">
-                        <div class="col-8 mx-auto">
-                            <div class="card text-white bg-dark shadow-lg">
-                                <div class="card-body">
-                                    <h3 align="center"><i>NEW EMPLOYEE INFORMATION</i></h3>
-                                    <form method="post" action="" id="newEmployeeForm">
-                                        @csrf
-                                        <table class="table table-bordered table-inverse text-white">
-                                            <tbody>
-                                                <tr>
-                                                    <div class="form-group">
-                                                        <td style="width: 20%;" class="pt-3">Employee No.:</td>
-                                                        <td>
-                                                            <span id="employeeNumber" class="uppercase rounded-0 form-control"></span>
-                                                        </td>
-                                                    </div>
-                                                </tr>
-                                                <tr>
-                                                    <div class="form-group">
-                                                        <td style="width: 20%;" class="pt-3"><label for="firstname">First Name:</label></td>
-                                                        <td>
-                                                            <input type="text" name="firstname" id="firstname" class="uppercase rounded-0 form-control" aria-describedby="helpId">
-                                                        </td>
-                                                    </div>
-                                                </tr>
-                                                <tr>
-                                                    <div class="form-group">
-                                                        <td style="width: 20%;" class="pt-3"><label for="middlename">Middle Name:</label></td>
-                                                        <td>
-                                                            <input type="text" name="middlename" id="middlename" class="uppercase rounded-0 form-control" aria-describedby="helpId">
-                                                        </td>
-                                                    </div>
-                                                </tr>
-                                                <tr>
-                                                    <div class="form-group">
-                                                        <td style="width: 20%;" class="pt-3"><label for="lastname">Last Name:</label></td>
-                                                        <td>
-                                                            <input type="text" name="lastname" id="lastname" class="uppercase rounded-0 form-control" aria-describedby="helpId">
-                                                        </td>
-                                                    </div>
-                                                </tr>
-                                                <tr>
-                                                    <div class="form-group">
-                                                        <td style="width: 20%;" class="pt-3"><label for="department">Department:</label></td>
-                                                        <td>
-                                                            <input type="text" name="department" id="department" class="uppercase rounded-0 form-control" aria-describedby="helpId">
-                                                        </td>
-                                                    </div>
-                                                </tr>
-                                                <tr>
-                                                    <div class="form-group">
-                                                        <td style="width: 20%;" class="pt-3"><label for="position">Position:</label></td>
-                                                        <td>
-                                                            <input type="text" name="position" id="position" class="uppercase rounded-0 form-control" aria-describedby="helpId">
-                                                        </td>
-                                                    </div>
-                                                </tr>
-                                                <tr>
-                                                    <div class="form-group">
-                                                        <td style="width: 20%;" class="pt-3"><label for="superior">Superior:</label></td>
-                                                        <td>
-                                                            <input type="text" name="superior" id="superior" class="uppercase rounded-0 form-control" aria-describedby="helpId">
-                                                        </td>
-                                                    </div>
-                                                </tr>
-                                            </tbody>
-                                        </table>
-                                        <table class="table table-bordered table-inverse text-white">
-                                            <tbody>
-                                                <tr>
-                                                    <div class="form-group">
-                                                        <td style="width: 20%;" class="pt-3"><label for="email">Email:</label></td>
-                                                        <td>
-                                                            <input type="text" name="email" id="email" class="rounded-0 form-control" aria-describedby="helpId">
-                                                        </td>
-                                                    </div>
-                                                </tr>
-                                                <tr>
-                                                    <div class="form-group">
-                                                        <td style="width: 20%;" class="pt-3"><label for="username">Username:</label></td>
-                                                        <td>
-                                                            <input type="text" name="username" id="username" class="rounded-0 form-control" aria-describedby="helpId">
-                                                        </td>
-                                                    </div>
-                                                </tr>
-                                                <tr>
-                                                    <div class="form-group">
-                                                        <td style="width: 20%;" class="pt-3"><label for="password">Password:</label></td>
-                                                        <td>
-                                                            <div class="input-group">
-                                                                <input type="password" name="password" id="password" class="rounded-0 form-control" aria-describedby="helpId">
-                                                                <div class="input-group-append">
-                                                                    <button type="button" class="input-group-text" id="passwordEye" style="width: 40px;"><i class="far fa-eye-slash"></i></button>
-                                                                </div>
-                                                            </div>
-                                                        </td>
-                                                    </div>
-                                                </tr>
-                                            </tbody>
-                                        </table>
-                                        <div class="row">
-                                            <div class="col-6">
-                                            </div>    
-                                            <div class="col-3">
-                                                <button id="clear" type="button" class="btn btn-info form-control">Clear</button>
-                                            </div>    
-                                            <div class="col-3">
-                                                <button type="submit" class="btn btn-success form-control">Save</button>
-                                            </div>
-                                        </div>
-                                    </form>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
             </div>
         </div>
     </div>
+    <script src="{{asset('js/addEmployee.js')}}"></script>
     <script>
+        $('#bdate').datepicker({
+            dateFormat: 'MM dd, yy'
+        });
+
+        $('#bdate').on('keydown', function(){
+            var key = event.keyCode || event.charCode;
+
+            if( key == 8 || key == 46 )
+            return false;
+        })
+
         var randomNumber = Math.floor(Math.random() * 10000) + 1;
         $('#employeeNumber').text('2019-' + randomNumber);
 

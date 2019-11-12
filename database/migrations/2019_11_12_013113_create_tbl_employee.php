@@ -15,6 +15,10 @@ class CreateTblEmployee extends Migration
     {
         Schema::create('tbl_employee', function (Blueprint $table) {
             $table->bigIncrements('id');
+            $table->string('email');
+            $table->string('username');
+            $table->string('password');
+            $table->enum('active', ['1','0'])->default('1');
             $table->timestamps();
         });
     }
